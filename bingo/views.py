@@ -66,7 +66,16 @@ def generate_unique_numbers():
                 continue
             # Generate a unique random number from 1 to 75
             while True:
-                num = random.randint(1, 75)
+                if j == 0:
+                    num = random.randint(1, 15)
+                elif j == 1:
+                    num = random.randint(15, 30)
+                elif j == 2:
+                    num = random.randint(30, 49)
+                elif j == 3:
+                    num = random.randint(40, 59)
+                else:
+                    num = random.randint(60, 75)
                 if num not in used_numbers:
                     used_numbers.add(num)
                     row.append(num)
