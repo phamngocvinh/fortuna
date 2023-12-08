@@ -26,7 +26,7 @@ def join(request):
     formatted_date = today.strftime("%d/%m/%Y")
     simple_date = today.strftime("%d%m%Y")
 
-    userid = request.GET.get("userid", None).lower()  # default None if not present
+    userid = request.GET.get("userid", None).lower().strip()  # default None if not present
 
     card = BingoCard.objects.filter(userid=userid, date=simple_date).first()
 
