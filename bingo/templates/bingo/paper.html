@@ -35,14 +35,14 @@
             {{formatted_date}}
         </h1>
         <div class="table-responsive d-lg-none">
-            <table id="myTable" class="table table-bordered">
+            <table id="myTableS" class="table table-bordered">
                 {% for row in random_numbers %}
                 <tr>
                     {% for col in row %}
                     {% if col == '$$' %}
                     <td class="table-warning"
                         style="text-align: center; vertical-align: middle; font-size: 40px; font-weight: bolder;"
-                    >{{ col }}
+                    >{{ col }}</td>
                         {% else %}
                     <td style="text-align: center; vertical-align: middle; font-size: 40px; font-weight: bolder;"
                     >{{ col }}
@@ -54,14 +54,14 @@
             </table>
         </div>
         <div class="table-responsive d-none d-lg-block">
-            <table id="myTable" class="table table-bordered">
+            <table id="myTableL" class="table table-bordered">
                 {% for row in random_numbers %}
                 <tr>
                     {% for col in row %}
                     {% if col == '$$' %}
                     <td class="table-warning"
                         style="text-align: center; vertical-align: middle; height: 80px; font-size: 50px; font-weight: bolder;"
-                    >{{ col }}
+                    >{{ col }}</td>
                         {% else %}
                     <td style="text-align: center; vertical-align: middle; height: 80px; font-size: 50px; font-weight: bolder;"
                     >{{ col }}
