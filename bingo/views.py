@@ -4,8 +4,9 @@ from datetime import date
 import numpy as np
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.utils import timezone
 
-from .models import BingoCard
+from .models import BingoCard, System
 
 
 def back(request):
@@ -31,7 +32,6 @@ def join(request):
     card = BingoCard.objects.filter(userid=userid, date=simple_date).first()
 
     if card:
-        database = card.numbers
         my_list = card.numbers.split(',')
         array_2d = np.array(my_list).reshape(5, 5)
     else:
@@ -46,7 +46,43 @@ def join(request):
         card = BingoCard(userid=userid, date=simple_date, numbers=numbers)
         card.save()
 
-    context = {"userid": userid, "formatted_date": formatted_date, "random_numbers": array_2d}
+    system = System.objects.all().first()
+
+    count_players = BingoCard.objects.filter(date=simple_date).count()
+
+    context = {"userid": userid, "formatted_date": formatted_date, "random_numbers": array_2d,
+               "lock_submit": system.lock_submit, "count_players": count_players}
+
+    return render(request, "bingo/paper.html", context)
+
+
+def regen(request, userid):
+    today = date.today()
+    formatted_date = today.strftime("%d/%m/%Y")
+    simple_date = today.strftime("%d%m%Y")
+
+    count_players = BingoCard.objects.filter(date=simple_date).count()
+
+    card = BingoCard.objects.filter(userid=userid, date=simple_date).first()
+
+    system = System.objects.all().first()
+
+    if system.lock_submit != 1:
+        array_2d = generate_unique_numbers()
+        numbers = ""
+        for row in array_2d:
+            for col in row:
+                numbers = numbers + str(col) + ", "
+
+        card.numbers = numbers[:-2]
+        card.create_datetime = timezone.now()
+        card.save()
+    else:
+        my_list = card.numbers.split(',')
+        array_2d = np.array(my_list).reshape(5, 5)
+
+    context = {"userid": userid, "formatted_date": formatted_date, "random_numbers": array_2d,
+               "lock_submit": system.lock_submit, "count_players": count_players}
 
     return render(request, "bingo/paper.html", context)
 
